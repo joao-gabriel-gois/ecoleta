@@ -15,7 +15,7 @@ export default class PointsController {
             .where('city', String(city))
             .where('uf', String(uf))
             .distinct()
-            .select('points.*')
+            .select('points.*'); // return points, but knows which items to filter by joining point_items that has items info
 
          return response.json({
             get_success: true,
