@@ -4,13 +4,14 @@ import knex from '../database/connection';
 export default class PointsController {
    async index(request: Request, response: Response) {
       const { city, uf, items } = request.query;
+
       const parsedItems = String(items)
          .split(',')
          .map(item => Number(item.trim()));
 
       try {
          const points = await knex('points')
-            .join('point_items', 'point.id', '=', 'point_items.point_id')
+            .join('point_items', 'points.id', '=', 'point_items.point_id')
             .whereIn('point_items.item_id', parsedItems)
             .where('city', String(city))
             .where('uf', String(uf))
@@ -23,6 +24,7 @@ export default class PointsController {
          });
 
       } catch (error) {
+         console.log(error);
 
          return response.status(404).json({
             get_success: false,
