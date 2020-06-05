@@ -1,12 +1,89 @@
-import React from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
+import { Map, TileLayer, Marker } from 'react-leaflet';
+import api from '../../services/api';
+import axios from 'axios';
 
 import './styles.css';
 
 import logo from '../../assets/logo.svg';
 
+interface Item {
+   id: number,
+   image_url: string,
+   title: string
+}
+
+interface IBGEUFResponse {
+   sigla: string,
+}
+
+interface IBGECityResponse {
+   nome: string,
+}
+
 const CreatePoint = () => {
+   // states for arrays and obj shoud have a type of elements
+   const [ items, setItems ] = useState<Item[]>([]); // it could be useState<Array<Item>>([]) also
+   const [ ufs, setUfs ] = useState<string[]>([]);
+   const [ selectedUf, setSelectedUf ] = useState<string>('0');
+   const [ selectedCity, setSelectedCity ] = useState<string>('0');
+
+   const [ cities, setCities ] = useState<string[]>([]);
+
+
+   useEffect(() => {
+      api.get('items').then(response => {
+         
+         setItems(response.data.data);
+
+      }).catch(error => {
+         
+         console.log('Failed to load API resources to get Items!')
+         console.error(error);
+      
+      })
+   }, [])
+
+   useEffect(() => {
+      axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+         .then(response => {
+            const ufInitials = response.data.map(uf => uf.sigla);
+            setUfs(ufInitials);
+
+         }).catch(error => {
+         
+            console.log('Failed to load IBGE API resources to get UFs!')
+            console.error(error);
+      
+         })
+   }, [])
+
+   useEffect(() => {
+      if (selectedUf === '0') return;
+
+      axios.get<IBGECityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
+         .then(response => {
+            const citiesNames = response.data.map(city => city.nome);
+            setCities(citiesNames);
+
+         }).catch(error => {
+         
+            console.log('Failed to load IBGE API resources to get Cities!')
+            console.error(error);
+      
+         })
+   }, [selectedUf])
+
+   function handleSelectUf(event: ChangeEvent<HTMLSelectElement>) {
+      setSelectedUf(event.target.value);
+   }
+
+   function handleSelectCity(event: ChangeEvent<HTMLSelectElement>) {
+      setSelectedCity(event.target.value);
+   }
+
    return (
       <div id="page-create-point">
          <header>
@@ -61,18 +138,54 @@ const CreatePoint = () => {
                   <span>Selecione o endereço no mapa</span>
                </legend>
 
+               <Map center={[-27.2092052, -49.6401092]} zoom={15}>
+                  <TileLayer 
+                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker
+                     position={[-27.2092052, -49.6401092]}
+                  />
+               </Map>
+
                <div className="field-group">
                   <div className="field">
                      <label htmlFor="uf">Estado (UF)</label>
-                     <select name="uf" id="uf">
+                     <select
+                        name="uf"
+                        id="uf"
+                        value={selectedUf}
+                        onChange={handleSelectUf}
+                     >
                         <option value="0">Selecione uma UF</option>
+                        {ufs ?
+                           ufs.map(uf => {
+                              return (
+                              <option key={uf} value={uf}>{uf}</option>
+                              )
+                           }) : ''
+                        }
+
                      </select>
                   </div>
 
                   <div className="field">
                      <label htmlFor="city">Cidade</label>
-                     <select name="city" id="city">
-                        <option value="0">Selecione uma cidade</option>
+                     <select
+                        name="city"
+                        id="city"
+                        value={selectedCity}
+                        onChange={handleSelectCity}
+                     >
+                        <option value="0">Selecione uma Cidade</option>
+                        {cities ?
+                           cities.map(city => {
+                              return (
+                              <option key={city} value={city}>{city}</option>
+                              )
+                           }) : ''
+                        }
+
                      </select>
                   </div>
                </div>
@@ -85,30 +198,21 @@ const CreatePoint = () => {
                </legend>
 
                <ul className="items-grid">
-                  <li>
-                     <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-                     <span>Óleo de cozinha</span>
-                  </li>
-                  <li>
-                     <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-                     <span>Óleo de cozinha</span>
-                  </li>
-                  <li>
-                     <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-                     <span>Óleo de cozinha</span>
-                  </li>
-                  <li>
-                     <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-                     <span>Óleo de cozinha</span>
-                  </li>
-                  <li>
-                     <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-                     <span>Óleo de cozinha</span>
-                  </li>
-                  <li>
-                     <img src="http://localhost:3333/uploads/oleo.svg" alt="Oleo" />
-                     <span>Óleo de cozinha</span>
-                  </li>
+               
+               {items ?
+                  items.map(item => {
+                     return (
+                        <li key={item.id}>
+                           <img
+                              src={item.image_url}
+                              alt={item.title}
+                           />
+                           <span>{item.title}</span>
+                        </li>
+                     )
+                  }) : ''
+               }
+
                </ul>
 
             </fieldset>
