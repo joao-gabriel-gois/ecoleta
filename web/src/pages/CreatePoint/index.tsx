@@ -152,6 +152,7 @@ const CreatePoint = () => {
 
       await api.post('points', data);
 
+      alert('Cadastro realizado com sucesso!');
       //success screen logic
       history.push('/');
 
