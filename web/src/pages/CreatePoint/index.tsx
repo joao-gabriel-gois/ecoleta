@@ -55,7 +55,7 @@ const CreatePoint = () => {
    useEffect(() => {
       api.get('items').then(response => {
          
-         setItems(response.data.data);
+         setItems(response.data);
 
       }).catch(error => {
          
@@ -78,7 +78,7 @@ const CreatePoint = () => {
       
          })
    }, [])
-//get Cities every time seceted UF changes
+//get Cities every time selected UF changes
    useEffect(() => {
       if (selectedUf === '0') return;
 
@@ -145,6 +145,8 @@ const CreatePoint = () => {
          whatsapp,
          latitude,
          longitude,
+         city,
+         uf,
          items
       }
 
