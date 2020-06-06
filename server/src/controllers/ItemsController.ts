@@ -14,17 +14,13 @@ export default class ItemsController {
             }
          });
 
-         return response.json({
-            get_success: true,
-            data: serializedItems
-         });
+         return response.json(serializedItems);
 
       } catch (error) {
 
          return response.status(404).json({
-            get_success: false,
-            message: 'Could not connect to DataBase',
             error,
+            message: 'Could not connect to DataBase',
          })
       }
    }

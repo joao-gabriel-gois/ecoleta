@@ -18,18 +18,14 @@ export default class PointsController {
             .distinct()
             .select('points.*'); // return points, but knows which items to filter by joining point_items that has items info
 
-         return response.json({
-            get_success: true,
-            data: points
-         });
+         return response.json(points);
 
       } catch (error) {
          console.log(error);
 
          return response.status(404).json({
-            get_success: false,
-            message: 'Could not connect to DataBase',
             error,
+            message: 'Could not connect to DataBase',
          })
       }
    }
@@ -44,7 +40,6 @@ export default class PointsController {
 
          if (!point) {
             return response.status(400).json({
-               get_success: false,
                message: "Bad Request: Database was reached, but point wasn't found",
             })
          }
@@ -55,20 +50,18 @@ export default class PointsController {
          */
          const items = await knex('items')
             .join('point_items', 'items.id', '=', 'point_items.item_id')
-            .where('point_items.id', '=', id)
+            .where('point_items.point_id', '=', id)
             .select('items.title');
 
          return response.json({
-            get_success: true,
-            data: { point, items }
+            point, items
          })
 
       } catch (error) {
 
          return response.status(404).json({
-            get_success: false,
-            message: 'Could not connect to DataBase',
-            error
+            error,
+            message: 'Could not connect to DataBase'
          })
       }
    }
@@ -116,19 +109,15 @@ export default class PointsController {
          await trx.commit(); // used to finish transaction
 
          return response.json({
-            post_success: true,
-            data: {
-               point_id,
-               ...point
-            }
+            point_id,
+            ...point
          });
 
       } catch (error) {
 
-         return response.json({
-            post_success: false,
-            message: "Could not connect to DataBase",
-            error
+         return response.status(404).json({
+            error,
+            message: "Could not connect to DataBase"
          })
       }
    }
