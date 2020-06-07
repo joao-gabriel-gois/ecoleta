@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Text, SafeAreaView} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Text, SafeAreaView, Linking } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Feather as FeatherIcon, FontAwesome as AwesomeIcon } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -44,7 +44,8 @@ const Detail = () => {
   }
 
   function handleWhastapp() {
-
+    const message = 'Olá, Tudo bem? Gostaria de descartar alguns items que vocês coletam.'
+    Linking.openURL(`whatsapp://send?phone${data.point.whatsapp}&text=${message}`)
   }
 
   function handleComposeMail() {
