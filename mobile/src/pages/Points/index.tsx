@@ -41,10 +41,11 @@ const Points = () => {
 
   useEffect(() => {
     async function loadPosition() {
-      const { allowed } = Location.requestPermissionsAsync();
+      const { status } = await Location.requestPermissionsAsync();
 
-      if (allowed !== 'granted') {
-        Alert.alert('Oooops', 'Sem sua permissão não podemos localizar você!');
+      if (status !== 'granted') {
+        const message = 'Sem sua permissão não podemos localizar os pontos de coleta próximos a você!'
+        Alert.alert('Oooops', message);
         return;
       } 
       
