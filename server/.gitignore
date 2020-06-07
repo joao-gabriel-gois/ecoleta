@@ -1,1 +1,3 @@
 node_modules/
+upload/uploaded_points/
+*.sqlite
