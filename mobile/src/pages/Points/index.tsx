@@ -1,8 +1,7 @@
 import React from 'react';
-import Constants from 'expo-constants';
 import { Feather as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView, View, Text, Image, TouchableOpacity} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
 
@@ -18,7 +17,7 @@ const Points = () => {
     }
 
     return (
-      <>
+      <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
           <TouchableOpacity onPress={handleNavigateBack}>
             <Icon name="arrow-left" size={20} color="#34CB79" />
@@ -46,8 +45,8 @@ const Points = () => {
               }}>
                   <View style={styles.mapMarkerContainer}>
                     <Image
-                        style={styles.mapMarkerImage}
-                        source={{uri:'https://pt.freelogodesign.org/Content/img/logo-samples/bakary.png'}}
+                      style={styles.mapMarkerImage}
+                      source={{uri:'https://pt.freelogodesign.org/Content/img/logo-samples/bakary.png'}}
                     />
                     <Text style={styles.mapMarkerTitle}>Mercado</Text>
                   </View>
@@ -67,7 +66,7 @@ const Points = () => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </>
+      </SafeAreaView>
     )
 }
 
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 32,
-    paddingTop: 20 + Constants.statusBarHeight,
+    paddingTop: 20,
   },
 
   title: {
