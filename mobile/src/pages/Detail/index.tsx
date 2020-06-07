@@ -1,44 +1,99 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, Text, SafeAreaView} from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Feather as FeatherIcon, FontAwesome as AwesomeIcon } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import api from '../../services/api';
+import { AppLoading } from 'expo';
+import * as MailComposer from 'expo-mail-composer';
+
+interface Params {
+  point_id: number;
+}
+
+interface Data {
+  point: {
+    image: string,
+    name: string,
+    email: string,
+    whatsapp: string,
+    city: string,
+    uf: string
+  };
+  items: {
+    title: string
+  }[];
+}
 
 const Detail = () => {
+  const [ data, setData ] = useState<Data>({} as Data);
+
   const navigation = useNavigation();
+  const route = useRoute();
+  
+  const routeParams = route.params as Params;
+
+  useEffect(() => {
+    api.get(`points/${routeParams.point_id}`).then(response => {
+      setData(response.data);
+    })
+  }, [])
 
   function handleNavigateBack() {
     navigation.goBack();
   }
 
+  function handleWhastapp() {
+
+  }
+
+  function handleComposeMail() {
+    MailComposer.composeAsync({
+      subject: 'Coleta de Residuos - ECOLETA',
+      recipients: [data.point.email]
+    })
+  }
+
+  if (!data.point) {
+    return <AppLoading />
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+
         <TouchableOpacity onPress={handleNavigateBack}>
           <FeatherIcon name="arrow-left" size={20} color="#34CB79" />
         </TouchableOpacity>
         <Image
           style={styles.pointImage}
-          source={{uri:'https://pt.freelogodesign.org/Content/img/logo-samples/bakary.png'}}
+          source={{ uri: data.point.image }}
         />
 
-        <Text style={styles.pointName}> Mercado do João</Text>
-        <Text style={styles.pointItems}> Lâmpadas, Oléo de Cozinha</Text>
+        <Text style={styles.pointName}>{data.point.name}</Text>
+        <Text style={styles.pointItems}>
+          { data.items.map(item => item.title).join(', ') }
+        </Text>
 
         <View style={styles.address}>
           <Text style={styles.addressTitle}>Endereço:</Text>
-          <Text style={styles.addressContent}>São Paulo, SP</Text>
+          <Text style={styles.addressContent}>{data.point.city}, {data.point.uf}</Text>
         </View>
+
       </View>
+      
       <View style={styles.footer}>
-        <RectButton style={styles.button} onPress={()=>{}}>
+        
+        <RectButton style={styles.button} onPress={handleWhastapp}>
           <AwesomeIcon name="whatsapp" size={20} color="#FFF" />
           <Text style={styles.buttonText}>Whatsapp</Text>
         </RectButton>
-        <RectButton style={styles.button} onPress={()=>{}}>
+
+        <RectButton style={styles.button} onPress={handleComposeMail}>
           <FeatherIcon name="mail" size={20} color="#FFF" />
           <Text style={styles.buttonText}>E-mail</Text>
         </RectButton>
+
       </View>
     </SafeAreaView>
   )
@@ -95,7 +150,6 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: '#999',
     paddingVertical: 20,
-    paddingBottom: 0,
     paddingHorizontal: 32,
     flexDirection: 'row',
     justifyContent: 'space-between'
