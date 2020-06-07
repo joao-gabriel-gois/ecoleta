@@ -6,6 +6,8 @@ import { LeafletMouseEvent } from 'leaflet';
 import api from '../../services/api';
 import axios from 'axios';
 
+import Dropzone from '../../components/Dropzone';
+
 import './styles.css';
 
 import logo from '../../assets/logo.svg';
@@ -117,7 +119,7 @@ const CreatePoint = () => {
    }
 
    function handleSelectItem(id: number) {
-      const alreadySelectedItem = selectedItems.findIndex(item => item == id);
+      const alreadySelectedItem = selectedItems.findIndex(item => item === id);
 
       // toggle logic bellow
       if (alreadySelectedItem >= 0) {
@@ -170,6 +172,8 @@ const CreatePoint = () => {
 
          <form onSubmit={handleSubmit}>
             <h1>Cadastro do <br /> ponto de coleta</h1>
+
+            <Dropzone />
 
             <fieldset>
                <legend>

@@ -18,7 +18,14 @@ export default class PointsController {
             .distinct()
             .select('points.*'); // return points, but knows which items to filter by joining point_items that has items info
 
-         return response.json(points);
+         const serializedPoints = points.map(point => {
+            return {
+               ...point,
+               image_url: `http://192.168.1.121:3333/uploads/points/${point.image}`
+            }
+         });
+
+         return response.json(serializedPoints);
 
       } catch (error) {
          console.log(error);
@@ -44,6 +51,10 @@ export default class PointsController {
             })
          }
 
+         const serializedPoint = {
+            ...point,
+            image_url: `http://192.168.1.121:3333/uploads/points/${point.image}`
+         }
          /*
             SELECT * FROM items JOIN point_items ON items.id = point_items.item_id WHERE point_items.point_id = ${request.params.id}
             // in knex, it becomes:
@@ -54,7 +65,8 @@ export default class PointsController {
             .select('items.title');
 
          return response.json({
-            point, items
+            point: serializedPoint,
+            items
          })
 
       } catch (error) {
@@ -83,7 +95,7 @@ export default class PointsController {
          const trx = await knex.transaction(); //To guarantee that data will only be inserted if all queries are successful
 
          const point = {
-            image: 'image-fake', //only while upload is not implemented
+            image: request.file.filename, //only while upload is not implemented
             name,
             email,
             whatsapp,
@@ -97,12 +109,15 @@ export default class PointsController {
 
          const point_id = insertedPointIds[0];
 
-         const pointItems = items.map((item_id: number) => {
-            return {
-               item_id,
-               point_id
-            }
-         })
+         const pointItems = items
+            .split(',')
+            .map((item: string) => Number(item.trim()))
+            .map((item_id: number) => {
+               return {
+                  item_id,
+                  point_id
+               }
+            });
 
          await trx('point_items').insert(pointItems);
 

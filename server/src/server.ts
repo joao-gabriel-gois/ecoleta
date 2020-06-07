@@ -12,6 +12,7 @@ app.use(routes);
 
 //Static
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
+app.use('/uploads/points', express.static(path.resolve(__dirname, '..', 'uploads', 'uploaded_points')))
 
 //Starting
 console.log('Server is on')

@@ -1,7 +1,7 @@
 #page-home {
    height: 100vh;
  
-   background: url('../../assets/home-background.svg') no-repeat 700px bottom;
+   background: url('../../assets/home-background.svg') no-repeat 730px bottom;
  }
  
  #page-home .content {
@@ -23,7 +23,7 @@
  #page-home .content main {
    flex: 1;
    max-width: 560px;
- 
+   padding-right: 24px;
    display: flex;
    flex-direction: column;
    justify-content: center;
@@ -105,4 +105,42 @@
      font-size: 24px;
    }
  }
- 
+
+@media only screen and (max-width: 1430px) {
+  #page-home {
+    background: url('../../assets/home-background.svg') no-repeat 500px bottom;
+  }
+}
+
+@media only screen and (max-width: 1240px) {
+  #page-home {
+    background: url('../../assets/home-background.svg') no-repeat 400px bottom;
+  }
+}
+
+@media only screen and (max-width: 1150px) {
+  #page-home {
+    background: url('../../assets/home-background.svg') no-repeat 300px bottom;
+  }
+}
+
+@media only screen and (max-width: 1030px) {
+  #page-home {
+    background: url('../../assets/home-background.svg') no-repeat 280px bottom;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  #page-home {
+    background: #f0f0f5;
+  }
+}
+
+@media only screen and (max-width: 455px) {
+  #page-home .content main a {
+    font-size: 16px;
+  }
+  #page-home .content main a span {
+    padding: 16px;
+  }
+}
