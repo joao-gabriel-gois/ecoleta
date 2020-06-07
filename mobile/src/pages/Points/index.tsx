@@ -136,7 +136,7 @@ const Points = () => {
                       <Text style={styles.mapMarkerTitle}>{point.name}</Text>
                     </View>
                   </Marker>
-                )) : ''
+                )) : <View />
               }
             </MapView>
           )}
@@ -162,7 +162,7 @@ const Points = () => {
               <SvgUri width={42} height={42} uri={item.image_url} />
               <Text style={styles.itemTitle}>{item.title}</Text>
             </TouchableOpacity>
-          )) : ''
+          )) : <View />
         }
         </ScrollView>
       </View>  
