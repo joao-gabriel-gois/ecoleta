@@ -1,10 +1,27 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import Constants from 'expo-constants';
+import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
+import { Feather as Icon } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native';
 
 const Detail = () => {
+  const navigation = useNavigation();
+
+  function handleNavigateBack() {
+      navigation.goBack();
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> Hello Points</Text>
+      <TouchableOpacity onPress={handleNavigateBack}>
+          <Icon name="arrow-left" size={20} color="#34CB79" />
+      </TouchableOpacity>
+      <Image
+        style={styles.pointImage}
+        source={{uri:'https://pt.freelogodesign.org/Content/img/logo-samples/bakary.png'}}
+      />
+
+      <Text style={}> Hello Points</Text>
     </View>
   )
 }
@@ -13,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 32,
-    paddingTop: 20,
+    paddingTop: 20 + Constants.statusBarHeight,
   },
 
   pointImage: {
