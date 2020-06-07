@@ -8,7 +8,7 @@ interface Props {
   onFileUpload: (file: File) => void 
 }
 
-const Dropzone = () => {
+const Dropzone: React.FC<Props> = ({ onFileUpload }) => {
   const [ selectedFileUrl, setSelectedFileUrl ] = useState<string>('');
    
   const onDrop = useCallback(acceptedFiles => {
@@ -17,7 +17,9 @@ const Dropzone = () => {
     const fileUrl = URL.createObjectURL(file);
     
     setSelectedFileUrl(fileUrl);
-  }, [])
+    onFileUpload(file);
+  }, [onFileUpload])
+  
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
       onDrop,
       accept:'image/*'
