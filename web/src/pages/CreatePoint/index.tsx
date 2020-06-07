@@ -43,6 +43,7 @@ const CreatePoint = () => {
    const [ selectedCity, setSelectedCity ] = useState<string>('0');
    const [ selectedItems, setSelectedItems ] = useState<number[]>([]);
    const [ selectedPosition, setSelectedPosition ] = useState<[number, number]>([0, 0]);
+   const [ selectedImageFile, setSelectedImageFile ] = useState<File>()
 
    const history = useHistory();
 
@@ -141,15 +142,19 @@ const CreatePoint = () => {
       const [ latitude, longitude ] = selectedPosition;
       const items = selectedItems;
 
-      const data = {
-         name,
-         email,
-         whatsapp,
-         latitude,
-         longitude,
-         city,
-         uf,
-         items
+      const data = new FormData();
+
+      data.append('name', name);
+      data.append('email', email);
+      data.append('whatsapp', whatsapp);
+      data.append('latitude', String(latitude));
+      data.append('longitude', String(longitude));
+      data.append('city', city);
+      data.append('uf', uf);
+      data.append('item', items.join(','));
+      
+      if (selectedImageFile) {
+         data.append('image', selectedImageFile);
       }
 
       await api.post('points', data);
@@ -173,7 +178,7 @@ const CreatePoint = () => {
          <form onSubmit={handleSubmit}>
             <h1>Cadastro do <br /> ponto de coleta</h1>
 
-            <Dropzone />
+            <Dropzone onFileUpload={setSelectedImageFile} />
 
             <fieldset>
                <legend>
