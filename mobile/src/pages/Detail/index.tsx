@@ -8,14 +8,14 @@ const Detail = () => {
   const navigation = useNavigation();
 
   function handleNavigateBack() {
-      navigation.goBack();
+    navigation.goBack();
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <TouchableOpacity onPress={handleNavigateBack}>
-            <FeatherIcon name="arrow-left" size={20} color="#34CB79" />
+          <FeatherIcon name="arrow-left" size={20} color="#34CB79" />
         </TouchableOpacity>
         <Image
           style={styles.pointImage}
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   footer: {
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: '#999',
-    paddingVertical: 20,]
+    paddingVertical: 20,
     paddingBottom: 0,
     paddingHorizontal: 32,
     flexDirection: 'row',
