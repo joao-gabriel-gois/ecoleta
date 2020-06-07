@@ -1,5 +1,7 @@
 import { Joi } from 'celebrate';
 
+const regex = /^[1-6](,[1-6])*$/;
+
 const keysOptions = {
    name: Joi.string().required(),
    email: Joi.string().required().email(),
@@ -7,7 +9,7 @@ const keysOptions = {
    latitude: Joi.number().required(),
    longitude: Joi.number().required(),
    uf: Joi.string().required().min(2).max(2),
-   items: Joi.string().required().max(11).regex(/^[1-6](,[1-6])*$/g),
+   items: Joi.string().required().max(11).regex(regex),
 }
 
 const options = [
