@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa'
 
 import './styles.css';
@@ -8,9 +8,6 @@ interface Props {
  }
 
 const SuccessModal: React.FC<Props> = ({showState}) => {
-   useEffect(() => {
-      console.log('chegou!');
-   }, [showState]);
 
    return (
       <div className={`modal-container ${showState ? 'show' : ''}`}>
