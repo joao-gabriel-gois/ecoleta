@@ -144,6 +144,7 @@
    height: 350px;
    border-radius: 8px;
    margin-bottom: 24px;
+   z-index: 10;
  }
  
  #page-create-point form button {

@@ -11,6 +11,7 @@ import Dropzone from '../../components/Dropzone';
 import './styles.css';
 
 import logo from '../../assets/logo.svg';
+import SuccessModal from '../../components/SuccessModal';
 
 interface Item {
    id: number,
@@ -44,6 +45,7 @@ const CreatePoint = () => {
    const [ selectedItems, setSelectedItems ] = useState<number[]>([]);
    const [ selectedPosition, setSelectedPosition ] = useState<[number, number]>([0, 0]);
    const [ selectedImageFile, setSelectedImageFile ] = useState<File>()
+   const [ showSucessModal, setShowSucessModal ] = useState<boolean>(false);
 
    const history = useHistory();
 
@@ -115,7 +117,7 @@ const CreatePoint = () => {
 
    function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
       const { name, value } = event.target;
-
+   
       setFormData({ ...formData, [name]: value })
    }
 
@@ -151,7 +153,7 @@ const CreatePoint = () => {
       data.append('longitude', String(longitude));
       data.append('city', city);
       data.append('uf', uf);
-      data.append('item', items.join(','));
+      data.append('items', items.join(','));
       
       if (selectedImageFile) {
          data.append('image', selectedImageFile);
@@ -159,10 +161,11 @@ const CreatePoint = () => {
 
       await api.post('points', data);
 
-      alert('Cadastro realizado com sucesso!');
+      setShowSucessModal(true);
       //success screen logic
-      history.push('/');
-
+      setTimeout(() => {
+         history.push('/');
+      }, 2400);
    }
 
    return (
@@ -310,8 +313,9 @@ const CreatePoint = () => {
             <button type="submit">
                Cadastrar ponto de coleta
             </button>
-
+            
          </form>
+         <SuccessModal showState={showSucessModal} />
       </div>
    );
 };

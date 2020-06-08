@@ -45,7 +45,7 @@ const Home = () => {
 
           <TextInput 
             style={styles.input}
-            placeholder="Digite a UF"
+            placeholder="Digite a Cidade"
             value={city}
             autoCorrect={false}
             onChangeText={setCity}
