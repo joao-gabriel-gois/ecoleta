@@ -22,7 +22,7 @@
    margin-bottom: 16px;
 }
 
-.modal-container p {
+.modal-container.show p {
    font-size: 32px;
    margin-top: 8px;
    color: #F0F0F5;

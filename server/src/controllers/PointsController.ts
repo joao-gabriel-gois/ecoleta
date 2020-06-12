@@ -30,9 +30,9 @@ export default class PointsController {
       } catch (error) {
          console.log(error);
 
-         return response.status(404).json({
+         return response.status(500).json({
             error,
-            message: 'Could not connect to DataBase',
+            message: 'Could not connect to DataBase, check your query string, something may be missing',
          })
       }
    }
@@ -46,7 +46,7 @@ export default class PointsController {
          const point = await knex('points').where('id', id).first();
 
          if (!point) {
-            return response.status(400).json({
+            return response.status(500).json({
                message: "Bad Request: Database was reached, but point wasn't found",
             })
          }
@@ -71,9 +71,9 @@ export default class PointsController {
 
       } catch (error) {
 
-         return response.status(404).json({
+         return response.status(500).json({
             error,
-            message: 'Could not connect to DataBase'
+            message: 'Could not connect to DataBase, not possible to join points and items'
          })
       }
    }
@@ -93,9 +93,11 @@ export default class PointsController {
 
       try {
          const trx = await knex.transaction(); //To guarantee that data will only be inserted if all queries are successful
-
+         const filename = request.file.filename;
+         const image = filename ? filename : 'no-image';
+         
          const point = {
-            image: request.file.filename, //only while upload is not implemented
+            image: image,
             name,
             email,
             whatsapp,
@@ -130,9 +132,9 @@ export default class PointsController {
 
       } catch (error) {
 
-         return response.status(404).json({
+         return response.status(500).json({
             error,
-            message: "Could not connect to DataBase"
+            message: "Could not connect to DataBase, probably some field missing for posting"
          })
       }
    }

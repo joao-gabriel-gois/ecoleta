@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
+import { filteringValidationArray, getCurrentValidationMessage } from '../../utils/validationUtils';
 import api from '../../services/api';
 import axios from 'axios';
 
@@ -26,6 +27,12 @@ interface IBGEUFResponse {
 interface IBGECityResponse {
    nome: string,
 }
+interface ValidationError {
+   validation: {
+      keys: string[]
+   },
+   message: string
+}
 
 const CreatePoint = () => {
    // states for arrays and obj shoud have a type of elements
@@ -45,18 +52,22 @@ const CreatePoint = () => {
    const [ selectedItems, setSelectedItems ] = useState<number[]>([]);
    const [ selectedPosition, setSelectedPosition ] = useState<[number, number]>([0, 0]);
    const [ selectedImageFile, setSelectedImageFile ] = useState<File>()
+   
+   const [ validationErrors, setValidationErrors ] = useState<ValidationError>({validation:{keys:['']},message:''});
+   const [ message, setMessage ] = useState<string>('');
+
    const [ showSucessModal, setShowSucessModal ] = useState<boolean>(false);
 
    const history = useHistory();
 
-//get initial position
+   //get initial position
    useEffect(() =>{
       navigator.geolocation.getCurrentPosition(position => {
          const { latitude, longitude } = position.coords;
          setInitialPosition([latitude, longitude]);
       })
    }, [])
-//get items
+   //get items
    useEffect(() => {
       api.get('items').then(response => {
          
@@ -69,7 +80,7 @@ const CreatePoint = () => {
       
       })
    }, [])
-//get UF from IBGE
+   //get UF from IBGE
    useEffect(() => {
       axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
          .then(response => {
@@ -83,7 +94,7 @@ const CreatePoint = () => {
       
          })
    }, [])
-//get Cities every time selected UF changes
+   //get Cities every time selected UF changes
    useEffect(() => {
       if (selectedUf === '0') return;
 
@@ -136,36 +147,53 @@ const CreatePoint = () => {
    }
 
    async function handleSubmit(event: FormEvent) {
-      event.preventDefault();
+      try {
+         event.preventDefault();
 
-      const { name, email, whatsapp } = formData;
-      const uf = selectedUf;
-      const city = selectedCity;
-      const [ latitude, longitude ] = selectedPosition;
-      const items = selectedItems;
+         const { name, email, whatsapp } = formData;
+         const uf = selectedUf;
+         const city = selectedCity;
+         const [ latitude, longitude ] = selectedPosition;
+         const items = selectedItems;
 
-      const data = new FormData();
+         const data = new FormData();
 
-      data.append('name', name);
-      data.append('email', email);
-      data.append('whatsapp', whatsapp);
-      data.append('latitude', String(latitude));
-      data.append('longitude', String(longitude));
-      data.append('city', city);
-      data.append('uf', uf);
-      data.append('items', items.join(','));
-      
-      if (selectedImageFile) {
-         data.append('image', selectedImageFile);
+         data.append('name', name);
+         data.append('email', email);
+         data.append('whatsapp', whatsapp);
+         data.append('latitude', String(latitude));
+         data.append('longitude', String(longitude));
+         data.append('city', city);
+         data.append('uf', uf);
+         data.append('items', items.join(','));
+         
+         if (selectedImageFile) {
+            data.append('image', selectedImageFile);
+         } else {
+            data.append('image', 'no-image-uploaded')
+         }
+
+         await api.post('points', data);
+
+         setShowSucessModal(true);
+         //success screen logic
+         setTimeout(() => {
+            history.push('/');
+         }, 2400);
+
+      } catch (error) {
+         
+         if (error.response.status === 400) {
+            setValidationErrors(error.response.data);
+   
+            console.log(error.response.data)
+            setMessage(error.response.data.message)
+
+         } else if (error.response.status === 404) {
+            alert('É necessário inserir imagem, um ponto no mapa e uma cidade!')
+            
+         }
       }
-
-      await api.post('points', data);
-
-      setShowSucessModal(true);
-      //success screen logic
-      setTimeout(() => {
-         history.push('/');
-      }, 2400);
    }
 
    return (
@@ -182,6 +210,13 @@ const CreatePoint = () => {
             <h1>Cadastro do <br /> ponto de coleta</h1>
 
             <Dropzone onFileUpload={setSelectedImageFile} />
+            <p
+               className='validation-errors centered-validation-message'
+               children={
+                  !!validationErrors && (filteringValidationArray('image', validationErrors) === 'image') ?
+                  'Image Upload is required' : ''
+               }
+            />
 
             <fieldset>
                <legend>
@@ -196,26 +231,48 @@ const CreatePoint = () => {
                      id="name"
                      onChange={handleInputChange}
                   />
+                  <p
+                     className='validation-errors'
+                     children={
+                        !!validationErrors && (filteringValidationArray('name', validationErrors) === 'name') ?
+                        getCurrentValidationMessage('name', message, validationErrors) : ''
+                     }
+                  />
                </div>
 
                <div className="field-group">
                   <div className="field">
-                     <label htmlFor="name">E-mail</label>
+                     <label htmlFor="email">E-mail</label>
                      <input
                         type="email"
                         name="email"
                         id="email"
                         onChange={handleInputChange}
                      />
+                     <p
+                        className='validation-errors'
+                        children={
+                           !!validationErrors && (filteringValidationArray('email', validationErrors) === 'email') ?
+                           getCurrentValidationMessage('email', message, validationErrors) : ''
+                        }
+                     />
+
                   </div>
 
                   <div className="field">
-                     <label htmlFor="name">Whatsapp</label>
+                     <label htmlFor="whatsapp">WhatsApp</label>
                      <input
                         type="text"
                         name="whatsapp"
                         id="whatsapp"
                         onChange={handleInputChange}
+                     />
+                     <p
+                        className='validation-errors'
+                        children={
+                           !!validationErrors && (filteringValidationArray('whatsapp', validationErrors) === 'whatsapp') ?
+                           getCurrentValidationMessage('whatsapp', message, validationErrors) : ''
+                        }
                      />
                   </div>
                </div>
@@ -236,6 +293,15 @@ const CreatePoint = () => {
                      position={selectedPosition}
                   />
                </Map>
+               
+               <p
+                  className='centered-validation-message validation-errors'
+                  children={
+                     !!validationErrors && (filteringValidationArray('latitude', validationErrors) === 'latitude') ?
+                     'Selection in Map above of the exact address of your collection point is required' : ''
+                  }
+               />
+      
 
                <div className="field-group">
                   <div className="field">
@@ -274,10 +340,25 @@ const CreatePoint = () => {
                               )
                            }) : ''
                         }
-
                      </select>
                   </div>
                </div>
+               <span className="city-and-uf-validation-wrapper">
+                  <p
+                     className='validation-errors'
+                     children={
+                        !!validationErrors && (filteringValidationArray('uf', validationErrors) === 'uf') ?
+                        getCurrentValidationMessage('uf', message, validationErrors) : ''
+                     }
+                  />
+                  <p
+                     className='validation-errors'
+                     children={
+                        !!validationErrors && (filteringValidationArray('city', validationErrors) === 'city') ?
+                        getCurrentValidationMessage('city', message, validationErrors) : ''
+                     }
+                  />
+               </span>
             </fieldset>
             
             <fieldset>
@@ -307,6 +388,13 @@ const CreatePoint = () => {
                }
 
                </ul>
+               <p
+                  className='validation-errors centered-validation-message'
+                  children={
+                     !!validationErrors && (filteringValidationArray('items', validationErrors) === 'items') ?
+                     getCurrentValidationMessage('items', message, validationErrors) : ''
+                  }
+               />
 
             </fieldset>
 
