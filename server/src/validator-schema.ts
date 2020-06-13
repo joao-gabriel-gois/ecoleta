@@ -6,7 +6,7 @@ const keysOptions = {
    // image is not here, so in case it is not uploaded
    // PointsController.create will return a string and it will
    // gerenarate a validation error. Web front end will ignore
-   // it's message and return to user that image upload is required
+   // Joi's message and return to user a custom message
    name: Joi.string().required(),
    email: Joi.string().required().email(),
    whatsapp: Joi.number().required().min(8),

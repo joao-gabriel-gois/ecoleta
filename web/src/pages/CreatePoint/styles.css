@@ -205,20 +205,13 @@
   border: 2px solid #34CB79;
 }
 
-.validation-errors {
-  font-size: 14px;
-  color: #DA2041;
-  margin: 10px 0 0 20px;
-}
-
-.centered-validation-message {
-  text-align: center;
-  margin: 8px 0 24px;
-}
-
 .city-and-uf-validation-wrapper {
   display: flex;
   flex-direction: row;
+}
+
+.city-and-uf-validation-wrapper p + p {
+  margin-left: 72px;
 }
 
 
@@ -241,6 +234,14 @@
   }
   #page-create-point header a svg {
     color: var(--primary-color);
+  }
+
+  .city-and-uf-validation-wrapper {
+    flex-direction: column;
+  }
+
+  .city-and-uf-validation-wrapper p + p {
+    margin: 10px 20px;
   }
 }
 

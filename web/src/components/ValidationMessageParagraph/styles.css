@@ -1,0 +1,10 @@
+.validation-errors {
+   font-size: 12px;
+   color: #DA2041;
+   margin: 10px 0 0 20px;
+}
+
+.centered-validation-message {
+   text-align: center;
+   margin: 8px 0 24px;
+}

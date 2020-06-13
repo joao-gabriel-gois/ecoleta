@@ -3,11 +3,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
-import { filteringValidationArray, getCurrentValidationMessage } from '../../utils/validationUtils';
 import api from '../../services/api';
 import axios from 'axios';
 
 import Dropzone from '../../components/Dropzone';
+import ValidationMessageParagraph from '../../components/ValidationMessageParagraph';
 
 import './styles.css';
 
@@ -170,7 +170,12 @@ const CreatePoint = () => {
          if (selectedImageFile) {
             data.append('image', selectedImageFile);
          } else {
-            data.append('image', 'no-image-uploaded')
+            // this will return a validation error
+            // since image is not set on Joi validator-schema in backend
+            // then we will treat it in front-end as a custom message and
+            // ignore the one returned from Joi. This was the better way
+            // I found to deal with multer and image uplaod validation until now
+            data.append('image', 'no-image-uploaded');
          }
 
          await api.post('points', data);
@@ -189,9 +194,6 @@ const CreatePoint = () => {
             console.log(error.response.data)
             setMessage(error.response.data.message)
 
-         } else if (error.response.status === 404) {
-            alert('É necessário inserir imagem, um ponto no mapa e uma cidade!')
-            
          }
       }
    }
@@ -210,14 +212,16 @@ const CreatePoint = () => {
             <h1>Cadastro do <br /> ponto de coleta</h1>
 
             <Dropzone onFileUpload={setSelectedImageFile} />
-            <p
-               className='validation-errors centered-validation-message'
-               children={
-                  !!validationErrors && (filteringValidationArray('image', validationErrors) === 'image') ?
-                  'Image Upload is required' : ''
-               }
-            />
 
+            <ValidationMessageParagraph
+               centered
+               fieldName={'image'}
+               validationErrors={validationErrors}
+               customMessage
+               message={
+                  'Image Upload is required'
+               }
+            />  
             <fieldset>
                <legend>
                   <h2>Dados</h2>
@@ -231,12 +235,12 @@ const CreatePoint = () => {
                      id="name"
                      onChange={handleInputChange}
                   />
-                  <p
-                     className='validation-errors'
-                     children={
-                        !!validationErrors && (filteringValidationArray('name', validationErrors) === 'name') ?
-                        getCurrentValidationMessage('name', message, validationErrors) : ''
-                     }
+                  <ValidationMessageParagraph
+                     centered={false}
+                     fieldName={'name'}
+                     validationErrors={validationErrors}
+                     message={message}
+                     customMessage={false}
                   />
                </div>
 
@@ -249,12 +253,12 @@ const CreatePoint = () => {
                         id="email"
                         onChange={handleInputChange}
                      />
-                     <p
-                        className='validation-errors'
-                        children={
-                           !!validationErrors && (filteringValidationArray('email', validationErrors) === 'email') ?
-                           getCurrentValidationMessage('email', message, validationErrors) : ''
-                        }
+                     <ValidationMessageParagraph
+                        centered={false}
+                        fieldName={'email'}
+                        validationErrors={validationErrors}
+                        message={message}
+                        customMessage={false}
                      />
 
                   </div>
@@ -267,12 +271,12 @@ const CreatePoint = () => {
                         id="whatsapp"
                         onChange={handleInputChange}
                      />
-                     <p
-                        className='validation-errors'
-                        children={
-                           !!validationErrors && (filteringValidationArray('whatsapp', validationErrors) === 'whatsapp') ?
-                           getCurrentValidationMessage('whatsapp', message, validationErrors) : ''
-                        }
+                     <ValidationMessageParagraph
+                        centered={false}
+                        fieldName={'whatsapp'}
+                        validationErrors={validationErrors}
+                        message={message}
+                        customMessage={false}
                      />
                   </div>
                </div>
@@ -294,11 +298,13 @@ const CreatePoint = () => {
                   />
                </Map>
                
-               <p
-                  className='centered-validation-message validation-errors'
-                  children={
-                     !!validationErrors && (filteringValidationArray('latitude', validationErrors) === 'latitude') ?
-                     'Selection in Map above of the exact address of your collection point is required' : ''
+               <ValidationMessageParagraph
+                  centered
+                  fieldName={'latitude' || 'longitude'}
+                  validationErrors={validationErrors}
+                  customMessage
+                  message={
+                     'Selection in Map above of the exact address of your collection point is required'
                   }
                />
       
@@ -344,19 +350,19 @@ const CreatePoint = () => {
                   </div>
                </div>
                <span className="city-and-uf-validation-wrapper">
-                  <p
-                     className='validation-errors'
-                     children={
-                        !!validationErrors && (filteringValidationArray('uf', validationErrors) === 'uf') ?
-                        getCurrentValidationMessage('uf', message, validationErrors) : ''
-                     }
+                  <ValidationMessageParagraph
+                     centered={false}
+                     fieldName={'uf'}
+                     validationErrors={validationErrors}
+                     customMessage={false}
+                     message={message}
                   />
-                  <p
-                     className='validation-errors'
-                     children={
-                        !!validationErrors && (filteringValidationArray('city', validationErrors) === 'city') ?
-                        getCurrentValidationMessage('city', message, validationErrors) : ''
-                     }
+                  <ValidationMessageParagraph
+                     centered={false}
+                     fieldName={'city'}
+                     validationErrors={validationErrors}
+                     customMessage={false}
+                     message={message}
                   />
                </span>
             </fieldset>
@@ -388,13 +394,13 @@ const CreatePoint = () => {
                }
 
                </ul>
-               <p
-                  className='validation-errors centered-validation-message'
-                  children={
-                     !!validationErrors && (filteringValidationArray('items', validationErrors) === 'items') ?
-                     getCurrentValidationMessage('items', message, validationErrors) : ''
-                  }
-               />
+               <ValidationMessageParagraph
+                  centered
+                  fieldName={'items'}
+                  validationErrors={validationErrors}
+                  customMessage={false}
+                  message={message}
+               />  
 
             </fieldset>
 
