@@ -236,11 +236,9 @@ const CreatePoint = () => {
                      onChange={handleInputChange}
                   />
                   <ValidationMessageParagraph
-                     centered={false}
                      fieldName={'name'}
                      validationErrors={validationErrors}
                      message={message}
-                     customMessage={false}
                   />
                </div>
 
@@ -254,11 +252,9 @@ const CreatePoint = () => {
                         onChange={handleInputChange}
                      />
                      <ValidationMessageParagraph
-                        centered={false}
                         fieldName={'email'}
                         validationErrors={validationErrors}
                         message={message}
-                        customMessage={false}
                      />
 
                   </div>
@@ -272,11 +268,9 @@ const CreatePoint = () => {
                         onChange={handleInputChange}
                      />
                      <ValidationMessageParagraph
-                        centered={false}
                         fieldName={'whatsapp'}
                         validationErrors={validationErrors}
                         message={message}
-                        customMessage={false}
                      />
                   </div>
                </div>
@@ -351,17 +345,13 @@ const CreatePoint = () => {
                </div>
                <span className="city-and-uf-validation-wrapper">
                   <ValidationMessageParagraph
-                     centered={false}
                      fieldName={'uf'}
                      validationErrors={validationErrors}
-                     customMessage={false}
                      message={message}
                   />
                   <ValidationMessageParagraph
-                     centered={false}
                      fieldName={'city'}
                      validationErrors={validationErrors}
-                     customMessage={false}
                      message={message}
                   />
                </span>
@@ -398,7 +388,6 @@ const CreatePoint = () => {
                   centered
                   fieldName={'items'}
                   validationErrors={validationErrors}
-                  customMessage={false}
                   message={message}
                />  
 

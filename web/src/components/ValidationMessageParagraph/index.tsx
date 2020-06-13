@@ -11,8 +11,8 @@ interface ValidationError {
 }
 
 interface Props {
-   centered: boolean,
-   customMessage: boolean,
+   centered?: boolean,
+   customMessage?: boolean,
    fieldName: string,
    validationErrors: ValidationError,
    message: string

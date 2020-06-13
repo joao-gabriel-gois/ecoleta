@@ -208,6 +208,7 @@
 .city-and-uf-validation-wrapper {
   display: flex;
   flex-direction: row;
+  margin: -20px 0;
 }
 
 .city-and-uf-validation-wrapper p + p {
