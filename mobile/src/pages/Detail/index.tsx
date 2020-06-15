@@ -5,6 +5,7 @@ import { Feather as FeatherIcon, FontAwesome as AwesomeIcon } from '@expo/vector
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import { AppLoading } from 'expo';
+import Constants from 'expo-constants';
 import * as MailComposer from 'expo-mail-composer';
 
 interface Params {
@@ -64,7 +65,7 @@ const Detail = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
 
-        <TouchableOpacity onPress={handleNavigateBack}>
+        <TouchableOpacity onPress={handleNavigateBack} style={styles.backButton}>
           <FeatherIcon name="arrow-left" size={20} color="#34CB79" />
         </TouchableOpacity>
         <Image
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 32,
-    paddingTop: 20,
+    paddingTop: 10 + Constants.statusBarHeight,
   },
 
   pointImage: {

@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, ScrollView, SafeAreaView, View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
+import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import api from '../../services/api';
 
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 32,
-    paddingTop: 20,
+    paddingTop: 10 + Constants.statusBarHeight,
   },
 
   title: {
