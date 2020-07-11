@@ -9,9 +9,9 @@ const keysOptions = {
    // Joi's message and return to user a custom message
    name: Joi.string().required(),
    email: Joi.string().required().email(),
-   whatsapp: Joi.number().required().min(8),
-   latitude: Joi.number().min(2).required(),
-   longitude: Joi.number().min(2).required(),
+   whatsapp: Joi.number().required(),
+   latitude: Joi.number().empty(0).required(),
+   longitude: Joi.number().empty(0).required(),
    city: Joi.string().min(2).required(),
    uf: Joi.string().required().min(2).max(2),
    items: Joi.string().required().max(11).regex(regex),
