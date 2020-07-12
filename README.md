@@ -19,7 +19,10 @@ __Validations response in web side:__
   ![Validation Example](https://user-images.githubusercontent.com/53549655/87236405-aef9d580-c3bf-11ea-9a03-7b646a9f130d.gif)
 
 ### __App__:
-  ![App Example](https://user-images.githubusercontent.com/53549655/87240240-1dee2300-c3ee-11ea-8f9f-9a4ceb2b59e0.gif)
+
+  <p align="center">
+    <img src="https://user-images.githubusercontent.com/53549655/87240240-1dee2300-c3ee-11ea-8f9f-9a4ceb2b59e0.gif" alt="App Example"/>
+  </p>
 
 
 ## To run this project:
@@ -35,7 +38,7 @@ __Validations response in web side:__
     cd ecoleta/server && yarn && cd ../web && yarn && cd ../mobile && yarn
     ```
 
-  * In case of yarn is not installed in your environment, you can use **npm** to install dependencies (use `npm isntall` insted of yarn in the above command). However, I strongly recommend you to use yarn. To install it, run:
+  * In case of yarn is not installed in your environment, you can use **npm** to install dependencies (use `npm isntall` instead of yarn in the above command). However, I strongly recommend you to use yarn. To install it, run:
       
       ```bash
       npm install -g yarn
