@@ -66,7 +66,8 @@ Validations response in web client side:
 
 #### To run the web project
 
-  * Start ReactJS and it will open the browser with project running
+  * Start ReactJS and it will open the browser with project running:
+
     ```bash
     cd ../web && yarn start
     ```
@@ -74,6 +75,7 @@ Validations response in web client side:
 #### To run the mobile project
   
   * Start Expo:
+  
     ```bash
     cd ../mobile && yarn start
     ```
