@@ -12,11 +12,17 @@
 
 ### __Web__:
 
-  ![Web Example](https://user-images.githubusercontent.com/53549655/87235786-43f7d100-c3b6-11ea-8eac-cc6693bbe824.gif)
+  <p align="center">
+    <img src="https://user-images.githubusercontent.com/53549655/87235786-43f7d100-c3b6-11ea-8eac-cc6693bbe824.gif" alt="Web Example"/>
+  </p>
 
-__Validations response in web side:__
 
-  ![Validation Example](https://user-images.githubusercontent.com/53549655/87236405-aef9d580-c3bf-11ea-9a03-7b646a9f130d.gif)
+Validations response in web client side:
+
+  <p align="center">
+    <img src="https://user-images.githubusercontent.com/53549655/87236405-aef9d580-c3bf-11ea-9a03-7b646a9f130d.gif" alt="Validation Example"/>
+  </p>
+
 
 ### __App__:
 
